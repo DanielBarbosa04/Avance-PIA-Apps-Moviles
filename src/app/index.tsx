@@ -1,13 +1,12 @@
-import * as Device from 'expo-device';
-import { Platform, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-
-import { AnimatedIcon } from '@/componentes/animated-icon';
 import { HintRow } from '@/componentes/hint-row';
+import { Logo } from '@/componentes/logo';
 import { ThemedText } from '@/componentes/themed-text';
 import { ThemedView } from '@/componentes/themed-view';
 import { WebBadge } from '@/componentes/web-badge';
 import { BottomTabInset, MaxContentWidth, Spacing } from '@/estilos/theme';
+import * as Device from 'expo-device';
+import { Platform, StyleSheet } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 function getDevMenuHint() {
   if (Platform.OS === 'web') {
@@ -33,14 +32,16 @@ export default function HomeScreen() {
     <ThemedView style={styles.container}>
       <SafeAreaView style={styles.safeArea}>
         <ThemedView style={styles.heroSection}>
-          <AnimatedIcon />
+          
+          
+          <Logo ancho={240} />
           <ThemedText type="title" style={styles.title}>
-            Welcome to&nbsp;Expo
+            DynaMD
           </ThemedText>
         </ThemedView>
 
         <ThemedText type="code" style={styles.code}>
-          get started
+          Your Body. Your Data
         </ThemedText>
 
         <ThemedView type="backgroundElement" style={styles.stepContainer}>
