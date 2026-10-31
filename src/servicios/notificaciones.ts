@@ -47,13 +47,16 @@ export async function guardarAjustes(ajustes: AjustesRecordatorios): Promise<voi
 }
 
 async function prepararCanalAndroid(): Promise<void> {
-  if (Platform.OS === 'android') {
-    // Android necesita al menos un canal para mostrar la solicitud de permiso.
+  if (Platform.OS !== 'android') return;
+  try {
     await Notifications.setNotificationChannelAsync(CANAL_ANDROID, {
       name: 'Recordatorios de DynaMD',
-      importance: Notifications.AndroidImportance.DEFAULT,
+      importance: Notifications.AndroidImportance.MAX,
       vibrationPattern: [0, 250, 250, 250],
+      lightColor: '#FF231F7C',
     });
+  } catch (error) {
+    console.warn('No se pudo crear el canal de notificaciones:', error);
   }
 }
 
@@ -66,9 +69,11 @@ export async function tienePermiso(): Promise<boolean> {
 export async function pedirPermiso(): Promise<boolean> {
   await prepararCanalAndroid();
   const actual = await Notifications.getPermissionsAsync();
+  console.log('Permiso de notificaciones (actual):', actual.status, 'puedePreguntar:', actual.canAskAgain);
   if (actual.granted) return true;
   if (!actual.canAskAgain) return false;
   const respuesta = await Notifications.requestPermissionsAsync();
+  console.log('Permiso de notificaciones (respuesta):', respuesta.status);
   return respuesta.granted;
 }
 

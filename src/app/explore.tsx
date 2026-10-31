@@ -15,7 +15,7 @@ export default function RecordatoriosScreen() {
             Recordatorios
           </ThemedText>
           <ThemedText type="small">
-            Elige cuándo quieres que DynaMD te anime a entrenar. Todo se guarda solo en tu teléfono.
+            Elige cuando quieres que DynaMD te anime a entrenar. Todo se guarda solo en tu telefono
           </ThemedText>
           <Recordatorios />
         </ScrollView>
@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
   areaSegura: { flex: 1, maxWidth: MaxContentWidth, paddingHorizontal: Spacing.four },
   contenido: {
     gap: Spacing.three,
-    paddingTop: Spacing.four,
+    paddingTop: Spacing.five + Spacing.three,
     paddingBottom: BottomTabInset + Spacing.four,
   },
   titulo: { fontSize: 32, lineHeight: 40 },

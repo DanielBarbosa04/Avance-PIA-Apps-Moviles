@@ -1,24 +1,24 @@
-import { useEffect, useState } from 'react';
-import { Alert, Linking, Pressable, StyleSheet, Switch, View, useColorScheme } from 'react-native';
-
 import { ThemedText } from '@/componentes/themed-text';
 import { ThemedView } from '@/componentes/themed-view';
 import { Colors, Spacing } from '@/estilos/theme';
 import {
-    AJUSTES_INICIALES,
-    cargarAjustes,
-    guardarAjustes,
-    pedirPermiso,
-    programarPrueba,
-    reprogramarRecordatorios,
-    tienePermiso,
-    type AjustesRecordatorios,
+  AJUSTES_INICIALES,
+  cargarAjustes,
+  guardarAjustes,
+  pedirPermiso,
+  programarPrueba,
+  reprogramarRecordatorios,
+  tienePermiso,
+  type AjustesRecordatorios,
 } from '@/servicios/notificaciones';
+import * as Notifications from 'expo-notifications';
+import { useEffect, useState } from 'react';
+import { Alert, Linking, Pressable, StyleSheet, Switch, View, useColorScheme } from 'react-native';
 
 const DIAS = [
   { valor: 1, etiqueta: 'L', nombre: 'Lunes' },
   { valor: 2, etiqueta: 'M', nombre: 'Martes' },
-  { valor: 3, etiqueta: 'X', nombre: 'Miércoles' },
+  { valor: 3, etiqueta: 'X', nombre: 'Miercoles' },
   { valor: 4, etiqueta: 'J', nombre: 'Jueves' },
   { valor: 5, etiqueta: 'V', nombre: 'Viernes' },
   { valor: 6, etiqueta: 'S', nombre: 'Sábado' },
@@ -34,6 +34,13 @@ export function Recordatorios() {
   const [ajustes, setAjustes] = useState<AjustesRecordatorios>(AJUSTES_INICIALES);
   const [cargando, setCargando] = useState(true);
   const [programadas, setProgramadas] = useState(0);
+
+  useEffect(() => {
+    const suscripcion = Notifications.addNotificationReceivedListener((notificacion) => {
+      console.log('Notificación recibida:', JSON.stringify(notificacion.request.content));
+   });
+  return () => suscripcion.remove();
+}, []);
 
   useEffect(() => {
     let activo = true;
@@ -73,21 +80,31 @@ export function Recordatorios() {
   }
 
   async function cambiarActivo(valor: boolean) {
+  try {
     if (valor && !(await pedirPermiso())) {
       avisarSinPermiso();
       return;
     }
     await aplicar({ ...ajustes, activo: valor });
+  } catch (error) {
+    console.warn('No se pudo cambiar el recordatorio:', error);
+    Alert.alert('No se pudo activar', 'Ocurrió un problema con las notificaciones de este dispositivo.');
   }
+}
 
-  async function enviarPrueba() {
+async function enviarPrueba() {
+  try {
     if (!(await pedirPermiso())) {
       avisarSinPermiso();
       return;
     }
     await programarPrueba();
     Alert.alert('Prueba enviada', 'La notificación llegará en unos 5 segundos.');
+  } catch (error) {
+    console.warn('No se pudo enviar la prueba:', error);
+    Alert.alert('No se pudo enviar', 'Ocurrió un problema con las notificaciones de este dispositivo.');
   }
+}
 
   function alternarDia(dia: number) {
     const dias = ajustes.diasEntrenamiento.includes(dia)
