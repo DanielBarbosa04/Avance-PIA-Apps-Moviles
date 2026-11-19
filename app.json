@@ -36,7 +36,17 @@
         }
       ],
       "expo-image",
-      "expo-web-browser"
+      "expo-web-browser",
+      "expo-secure-store",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "usesCleartextTraffic": true
+          }
+        }
+      ],
+      "expo-status-bar"
     ],
     "experiments": {
       "typedRoutes": true,
@@ -49,8 +59,9 @@
         }
       },
       "eas": {
-        "projectId": "44dd04d6-eccd-4f0d-bf87-8f2dc738cec2"
+        "projectId": "e889fa5a-7e39-4c26-b367-9f648935fc82"
       }
-    }
+    },
+    "owner": "mdeleon20"
   }
 }

@@ -1,14 +1,16 @@
 import { PrismaMariaDb } from '@prisma/adapter-mariadb';
 
 import { PrismaClient } from '../../generated/prisma/client';
+import type { Configuracion } from './configuracion';
 
-const adaptador = new PrismaMariaDb({
-  host: process.env.DATABASE_HOST,
-  port: Number(process.env.DATABASE_PORT ?? 3306),
-  user: process.env.DATABASE_USER,
-  password: process.env.DATABASE_PASSWORD,
-  database: process.env.DATABASE_NAME,
-  connectionLimit: 5,
-});
-
-export const prisma = new PrismaClient({ adapter: adaptador });
+export function crearPrisma(config: Configuracion) {
+  const adaptador = new PrismaMariaDb({
+    host: config.DATABASE_HOST,
+    port: config.DATABASE_PORT,
+    user: config.DATABASE_USER,
+    password: config.DATABASE_PASSWORD,
+    database: config.DATABASE_NAME,
+    connectionLimit: 5,
+  });
+  return new PrismaClient({ adapter: adaptador });
+}
